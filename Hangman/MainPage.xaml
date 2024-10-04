@@ -7,9 +7,17 @@
     <Grid RowDefinitions=".6*, .4*">
         <VerticalStackLayout>
             <Label 
-            FontAttributes="Bold"
-            HorizontalOptions="Center"
-            Text="Errors 0 of 6"/>
+			FontAttributes="Bold"
+			HorizontalOptions="Center"
+			Text="Errors 0 of 6"/>
+            <Image Source="img0.jpg" HeightRequest="200"/>
+            <Label FontSize="40"
+                   HorizontalOptions="Center"
+                   Text="_ _ _ _ _"
+                   VerticalOptions="Center" />
+            <Label FontSize="Large"
+                   HorizontalTextAlignment="Center"
+                   Text="You lost!"/>
         </VerticalStackLayout>
     </Grid>
 </ContentPage>
