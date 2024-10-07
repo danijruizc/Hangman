@@ -1,6 +1,6 @@
-﻿using System.ComponentModel;
+﻿using CoreImage;
+using System.ComponentModel;
 using System.Diagnostics;
-using System.Net.NetworkInformation;
 
 namespace Hangman
 {
@@ -17,8 +17,8 @@ namespace Hangman
             }
         }
 
-        public List<char> Letters 
-        { 
+        public List<char> Letters
+        {
             get => letters;
             set
             {
@@ -27,12 +27,32 @@ namespace Hangman
             }
         }
 
-        public string Message 
-        { 
+        public string Message
+        {
             get => message;
             set
             {
                 message = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public string GameStatus 
+        { 
+            get => gameStatus;
+            set 
+            { 
+                gameStatus = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private string CurrentImage 
+        { 
+            get => currentImage;
+            set
+            {
+                currentImage = value;
                 OnPropertyChanged();
             }
         }
@@ -61,6 +81,10 @@ namespace Hangman
         List<char> guessed = new List<char>();
         private List<char> letters = new List<char>();
         private string message;
+        int mistakes = 0;
+        int maxWrong = 6;
+        private string gameStatus;
+        private string currentImage = "img0.jpg";
         #endregion
 
         public MainPage()
@@ -87,37 +111,57 @@ namespace Hangman
 
             SpotLight = string.Join(' ', temp);
         }
-        #endregion
-
-        private void Button_Clicked(object sender, EventArgs e)
-        {
-            var btn = sender as Button;
-            if(btn != null)
-            {
-                var letter = btn.Text;
-                btn.IsEnabled = false;
-                HandleGuess(letter[0]);
-            }
-        }
-
         private void HandleGuess(char letter)
         {
-            if(guessed.IndexOf(letter) ==-1 )
+            if (guessed.IndexOf(letter) == -1)
             {
                 guessed.Add(letter);
             }
-            if(answer.IndexOf(letter) >= 0)
+            if (answer.IndexOf(letter) >= 0)
             {
                 CalculateWord(answer, guessed);
                 CheckIfGameWon();
+            }
+            else if (answer.IndexOf(letter) == -1)
+            {
+                mistakes++;
+                UpdateStatus();
+                CheckIfGameLost();
+            }
+        }
+
+        private void CheckIfGameLost()
+        {
+            if(mistakes == maxWrong)
+            {
+                Message = "You Lost!";
             }
         }
 
         private void CheckIfGameWon()
         {
-            if(SpotLight.Replace(" ", "") == answer)
+            if (SpotLight.Replace(" ", "") == answer)
             {
                 Message = "You win";
+            }
+
+        }
+
+        private void UpdateStatus()
+        {
+            GameStatus = $"Errors: {mistakes} of {maxWrong}";
+        }
+
+        #endregion
+
+        private void Button_Clicked(object sender, EventArgs e)
+        {
+            var btn = sender as Button;
+            if (btn != null)
+            {
+                var letter = btn.Text;
+                btn.IsEnabled = false;
+                HandleGuess(letter[0]);
             }
         }
     }
