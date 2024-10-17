@@ -1,5 +1,4 @@
-﻿using CoreImage;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Diagnostics;
 
 namespace Hangman
@@ -127,6 +126,8 @@ namespace Hangman
                 mistakes++;
                 UpdateStatus();
                 CheckIfGameLost();
+                CurrentImage = "img{mistakes}.jpg";
+                Debug.WriteLine(CurrentImage, "- this image should display");
             }
         }
 
@@ -135,6 +136,31 @@ namespace Hangman
             if(mistakes == maxWrong)
             {
                 Message = "You Lost!";
+                DisableLetters();
+            }
+        }
+
+        private void DisableLetters()
+        {
+            foreach (var children in LettersContainer.Children)
+            {
+                var btn = children as Button;
+                if (btn != null)
+                {
+                    btn.IsEnabled = false;
+                }
+            }
+        }
+
+        private void EnableLetters()
+        {
+            foreach (var children in LettersContainer.Children)
+            {
+                var btn = children as Button;
+                if (btn != null)
+                {
+                    btn.IsEnabled = true;
+                }
             }
         }
 
@@ -143,6 +169,7 @@ namespace Hangman
             if (SpotLight.Replace(" ", "") == answer)
             {
                 Message = "You win";
+                DisableLetters();
             }
 
         }
@@ -163,6 +190,18 @@ namespace Hangman
                 btn.IsEnabled = false;
                 HandleGuess(letter[0]);
             }
+        }
+
+        private void Reset_Clicked(object sender, EventArgs e)
+        {
+            mistakes = 0;
+            guessed = new List<char>();
+            CurrentImage = "img0.jpg";
+            PickWord();
+            CalculateWord(answer, guessed);
+            Message = "";
+            UpdateStatus();
+            EnableLetters();
         }
     }
 
