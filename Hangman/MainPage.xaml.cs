@@ -126,8 +126,8 @@ namespace Hangman
                 mistakes++;
                 UpdateStatus();
                 CheckIfGameLost();
-                CurrentImage = "img{mistakes}.jpg";
-                Debug.WriteLine(CurrentImage, "- this image should display");
+                CurrentImage = $"img{mistakes}.jpg";
+                Debug.WriteLine(CurrentImage, "this image should display:");
             }
         }
 
