@@ -46,7 +46,7 @@ namespace Hangman
             }
         }
 
-        private string CurrentImage 
+        public string CurrentImage 
         { 
             get => currentImage;
             set
